@@ -1,0 +1,20 @@
+# Ignorar arquivos objeto (.o)
+*.o
+
+# Ignorar o executável gerado
+main
+
+# Ignorar outros executáveis que podem ser criados
+*.exe
+*.out
+
+# Ignorar backups de editores
+*~
+*.swp
+*.bak
+*.tmp
+
+# Ignorar diretórios comuns gerados por editores/IDEs
+.vscode/
+.idea/
+.DS_Store
