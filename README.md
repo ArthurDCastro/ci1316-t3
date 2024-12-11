@@ -1,88 +1,39 @@
-# Paralelização de Particionamento - CI1316 Trabalho 2
+# Trabalho 3 - Multi-Particionamento com MPI
 
-Este repositório contém a implementação do **Trabalho 2** da disciplina CI1316, que consiste em paralelizar a função de particionamento de um vetor em múltiplas faixas utilizando **Pthreads**. O objetivo é explorar paralelismo em sistemas multicore e analisar o desempenho do algoritmo com diferentes números de threads.
+Este projeto implementa um particionamento de vetores utilizando **MPI**. O objetivo é dividir um vetor de números inteiros longos (`long long`) em faixas definidas, redistribuir os dados entre processos e medir o desempenho em um cluster.
 
-## **Descrição do Algoritmo**
+## 🛠️ Compilação
 
-A função principal, `multi_partition`, divide um vetor de entrada `Input` em várias faixas definidas por um vetor de partições `P`. O processo de particionamento é dividido em duas etapas principais:
+1. Compile o projeto com:
 
-1. **Contagem de Elementos em Cada Faixa**:
+   ```bash
+   make
+   ```
 
-   - As threads realizam a contagem de elementos localmente em suas respectivas porções do vetor de entrada.
-   - Os resultados locais são combinados em um vetor global utilizando uma operação de redução.
+2. Para limpar os arquivos gerados:
+   ```bash
+   make clean
+   ```
 
-2. **Cálculo de Offsets e Escrita no Vetor de Saída**:
-   - Cada thread utiliza os offsets calculados a partir das contagens para preencher o vetor de saída `Output`.
+## 🏃‍♂️ Execução
 
-A implementação utiliza barreiras e mutexes para sincronizar as threads e garantir a consistência dos dados.
-
----
-
-## **Estrutura do Repositório**
-
-- **`main.c`**: Contém a função principal e integra as etapas do algoritmo.
-- **`multi_partition.c`**: Implementa a função `multi_partition` e organiza o fluxo do algoritmo.
-- **`Makefile`**: Automação da compilação do projeto.
-- **`README.md`**: Este arquivo.
-
----
-
-## **Como Compilar**
-
-Para compilar o projeto, utilize o comando:
+Execute o programa com:
 
 ```bash
-make
+mpirun -np <n_processos> ./main <n_elementos> <n_particoes>
 ```
 
----
-
-## **Como Executar**
-
-O programa exige dois argumentos:
-
-1. Número total de elementos do vetor de entrada (`n`).
-2. Número de threads (`nThreads`).
-
-Exemplo de execução:
+### Exemplo
 
 ```bash
-./multi_partition 16000000 4
+mpirun -np 4 ./main 8000000 4
 ```
 
----
+- `<n_processos>`: Número de processos MPI.
+- `<n_elementos>`: Número total de elementos no vetor.
+- `<n_particoes>`: Número de partições.
 
-## **Estrutura das Funções**
+## 📝 Observações
 
-1. **`multi_partition`**:
-
-   - Gerencia a execução geral do algoritmo.
-   - Inicializa threads e estruturas de sincronização.
-   - Combina os resultados das threads.
-
-2. **`thread_count_partition`**:
-
-   - Executada por cada thread para contar elementos do vetor em suas respectivas faixas.
-
-3. **`merge_counts`**:
-   - Junta os resultados das contagens locais em um vetor global.
-
----
-
-## **Análise de Desempenho**
-
-O desempenho do algoritmo será analisado em termos de:
-
-- **Tempo de execução**: Medido para diferentes números de threads.
-- **Escalabilidade**: Avaliação da aceleração obtida com mais threads.
-- **Throughput**: Elementos processados por segundo.
-
-Os resultados das medições serão organizados em planilhas e gráficos para facilitar a análise.
-
----
-
-## **Contato**
-
-- **Disciplina**: CI1316 - Sistemas Operacionais
-- **Autor**: Arthur Dias Viana de Castro, Eduardo Neves
-- **E-mail**: [advc19@inf.ufpr.br](mailto:advc19@inf.ufpr.br)
+- Certifique-se de que **MPI** está instalado e configurado.
+- Utilize os scripts SLURM para experimentos em cluster.
