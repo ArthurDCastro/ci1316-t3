@@ -42,7 +42,6 @@ void fill_output(long long *Input, int n, long long *P, int np, long long *Outpu
  */
 void multi_partition(long long *Input, int n, long long *P, int np, long long *Output, int *Pos);
 
-
 /**
  * @brief Realiza uma busca binária para encontrar a partição à qual um valor pertence.
  *
@@ -54,5 +53,14 @@ void multi_partition(long long *Input, int n, long long *P, int np, long long *O
  */
 int binary_search(long long *arr, int l, int r, long long value);
 
+/**
+ * @brief Verifica se os elementos no vetor `Output` estão particionados corretamente de acordo com as faixas definidas em `P`.
+ *
+ * @param P Ponteiro para o vetor que define os limites das partições (deve estar ordenado).
+ * @param np Número de partições, correspondente ao tamanho do vetor `P`.
+ * @param Output Ponteiro para o vetor particionado que será verificado.
+ * @param Pos Ponteiro para o vetor que contém os índices iniciais de cada partição no vetor `Output`.
+ */
+void verifica_particoes(long long *P, int np, long long *Output, int *Pos);
 
 #endif // MULTI_PARTITION_H
