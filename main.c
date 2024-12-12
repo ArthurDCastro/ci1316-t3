@@ -60,17 +60,22 @@ int main(int argc, char *argv[])
     }
     MPI_Bcast(P, np, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
-    // Particionamento
-    MPI_Barrier(MPI_COMM_WORLD); // Sincronização antes de iniciar o tempo
-    double start_time = MPI_Wtime();
-    multi_partition(Input, n, P, np, Output, Pos);
-    double end_time = MPI_Wtime();
-    MPI_Barrier(MPI_COMM_WORLD); // Sincronização após o particionamento
+    int NTIMES = 10; // Número de repetições
+    double total_time = 0.0;
 
-    // Medição de tempo e saída
+    for (int t = 0; t < NTIMES; t++)
+    {
+        MPI_Barrier(MPI_COMM_WORLD);
+        double start_time = MPI_Wtime();
+        multi_partition(Input, n, P, np, Output, Pos);
+        MPI_Barrier(MPI_COMM_WORLD);
+        double end_time = MPI_Wtime();
+        total_time += (end_time - start_time);
+    }
+
     if (rank == 0)
     {
-        printf("Tempo de particionamento: %.6f segundos\n", end_time - start_time);
+        printf("Tempo médio de particionamento: %.6f segundos\n", total_time / NTIMES);
     }
 
     // Verificação das partições

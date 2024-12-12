@@ -64,7 +64,7 @@ void multi_partition(long long *Input, int n, long long *P, int np, long long *O
     free(counts);
 }
 
-void verifica_particoes(long long *Input, int n, long long *P, int np, long long *Output, int *Pos)
+void verifica_particoes(long long *P, int np, long long *Output, int *Pos)
 {
     int erro = 0;
 
