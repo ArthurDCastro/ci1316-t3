@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "multi_partition.h"
 #include "util.h"
+#include "chrono.h"
 
 int main(int argc, char *argv[])
 {
@@ -60,22 +61,34 @@ int main(int argc, char *argv[])
     }
     MPI_Bcast(P, np, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
+    chronometer_t partition_timer;
+    chrono_reset(&partition_timer);
+
     int NTIMES = 10; // Número de repetições
-    double total_time = 0.0;
+    // Medir tempo da partição
+    chrono_start(&partition_timer);
 
     for (int t = 0; t < NTIMES; t++)
     {
         MPI_Barrier(MPI_COMM_WORLD);
-        double start_time = MPI_Wtime();
         multi_partition(Input, n, P, np, Output, Pos);
         MPI_Barrier(MPI_COMM_WORLD);
-        double end_time = MPI_Wtime();
-        total_time += (end_time - start_time);
     }
+
+    chrono_stop(&partition_timer);
+    long long elapsed_time_ms = (long long)chrono_gettotal(&partition_timer) / (1000 * 1000);
 
     if (rank == 0)
     {
-        printf("Tempo médio de particionamento: %.6f segundos\n", total_time / NTIMES);
+        // Converter elapsed_time_ms para segundos como valor de ponto flutuante
+        double elapsed_time_sec = elapsed_time_ms / 1000.0;
+
+        // Calcular a taxa de processamento em milhões de elementos por segundo
+        double throughput = (nTotalElements * NTIMES) / (elapsed_time_sec * 1e6);
+
+        // Exibir resultados com precisão
+        printf("Tempo total de particionamento: %.3f segundos\n", elapsed_time_sec);
+        printf("Taxa de processamento: %.3f milhões de elementos por segundo\n", throughput);
     }
 
     // Verificação das partições
