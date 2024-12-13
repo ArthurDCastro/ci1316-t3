@@ -34,7 +34,7 @@ echo "MAX_EXECS " $MAX_EXECS
 echo "Executando $NTIMES vezes com $1 elementos e 1 nodo, e 8 processos MPI:"
 for j in $(seq 1 $NTIMES);
 do
-      ./main 8000000
+      mpirun -np ./main $1
       # ./multi_partition $1 | tee -a saida.txt | grep -oP '(?<=total_time_in_seconds: )[^ ]*'
 
 done
